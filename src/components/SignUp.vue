@@ -8,23 +8,59 @@
     <h1>Sign Up</h1>
   </div>
 
+  <!-- Form/ input side -->
   <form class="register">
-    <input type="text" placeholder="enter name" autocomplete="username" />
+    <input
+      type="text"
+      placeholder="enter name"
+      autocomplete="username"
+      v-model="name"
+    />
     <input
       type="email"
       placeholder="enter email"
       autocomplete="current-email"
+      v-model="email"
     />
     <input
       type="password"
       placeholder="enter password"
       autocomplete="current-password"
+      v-model="password"
     />
-    <button>Sign Up</button>
+    <button @click="signUp">Sign Up</button>
   </form>
 </template>
 
-<script></script>
+<script>
+import axios from "axios";
+export default {
+  data() {
+    return {
+      name: "",
+      email: "",
+      password: "",
+    };
+  },
+
+  methods: {
+    async signUp(e) {
+      e.preventDefault();
+      let result = await axios.post("http://localhost:3000/users", {
+        name: this.name,
+        email: this.email,
+        password: this.password,
+      });
+      console.log(result);
+      if (result.status == 201) {
+        alert("Sign up done.");
+      }
+
+      localStorage.setItem("user-info", JSON.stringify(result.data));
+    },
+  },
+};
+</script>
 
 <style scoped>
 .heading {
